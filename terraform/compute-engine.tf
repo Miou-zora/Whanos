@@ -15,7 +15,7 @@ resource "google_compute_instance" "default" {
     }
   }
 
-  tags= ["jenkins", "http-server", "https-server"]
+  tags= ["jenkins"]
 
   metadata_startup_script = <<SCRIPT
     sudo apt update
