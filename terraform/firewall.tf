@@ -1,6 +1,6 @@
 resource "google_compute_firewall" "jenkins_firewall" {
-  name    = "jenkins-ci"
-  network = "default"
+  name       = "jenkins-ci"
+  network    = "default"
 
   allow {
     protocol = "all"
