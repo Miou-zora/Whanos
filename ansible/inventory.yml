@@ -1,0 +1,6 @@
+all:
+  children:
+    jenkins:
+      hosts:
+        jenkins-1:
+          ansible_host: 34.155.93.110
