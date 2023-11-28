@@ -6,7 +6,7 @@ jenkins:
       users:
         - id: "admin"
           name: "Admin"
-          password: ${USER_CHOCOLATEEN_PASSWORD}
+          password: "${USER_ADMIN_PASSWORD}"
 
   authorizationStrategy:
     roleBased:
