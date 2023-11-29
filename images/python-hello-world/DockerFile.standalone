@@ -9,4 +9,6 @@ SHELL ["/bin/bash", "-c"]
 
 RUN pip install --no-cache-dir -r requirements.txt
 
+RUN rm requirements.txt
+
 CMD ["python", "-m", "app"]
