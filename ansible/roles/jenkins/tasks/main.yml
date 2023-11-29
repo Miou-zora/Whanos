@@ -33,14 +33,33 @@
   copy:
     src: plugins.yaml
     dest: /etc/plugins.yaml
+  register: result_plugins_file
 
-- name: run the jenkins-plugin-manager
+- name: Run the jenkins-plugin-manager
   become: yes
   command: java -jar jenkins-plugin-manager.jar --jenkins-version 2.426.1 --plugin-file /etc/plugins.yaml --plugin-download-directory /var/lib/jenkins/plugins
 
-- name: restart Jenkins
+- name: Jenkins Skip Setup Wizard
+  become: yes
+  lineinfile:
+    dest=/lib/systemd/system/jenkins.service
+    regexp='^Environment="JAVA_OPTS=-Djava.awt.headless=true'
+    line='Environment="JAVA_OPTS=-Djava.awt.headless=true -Djenkins.install.runSetupWizard=false"'
+  register: result_skip_startup_wizard
+
+- name: Restart Jenkins
   become: yes
   service:
     name: jenkins
     state: restarted
     enabled: yes
+  when: result_plugins_file.changed or result_skip_startup_wizard.changed
+
+- name: Start Jenkins
+  become: yes
+  service:
+    name: jenkins
+    state: started
+    enabled: yes
+  when: not result_plugins_file.changed and not result_skip_startup_wizard.changed
+
