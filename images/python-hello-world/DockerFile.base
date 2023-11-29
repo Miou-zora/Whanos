@@ -1,0 +1,14 @@
+FROM python:3.12
+
+WORKDIR /app
+
+ONBUILD COPY requirements.txt .
+ONBUILD COPY app app
+
+SHELL ["/bin/bash", "-c"]
+
+ONBUILD RUN pip install --no-cache-dir -r requirements.txt
+
+ONBUILD RUN rm requirements.txt
+
+CMD ["python", "-m", "app"]
