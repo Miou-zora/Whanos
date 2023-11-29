@@ -38,9 +38,9 @@
   become: yes
   command: java -jar jenkins-plugin-manager.jar --jenkins-version 2.426.1 --plugin-file /etc/plugins.yaml --plugin-download-directory /var/lib/jenkins/plugins
 
-- name: Start Jenkins
+- name: restart Jenkins
   become: yes
   service:
     name: jenkins
-    state: started
+    state: restarted
     enabled: yes
