@@ -1,11 +1,11 @@
 FROM gcc:13.2
 
+SHELL ["/bin/bash", "-c"]
+
 WORKDIR /app
 
 COPY Makefile .
 COPY app app
-
-SHELL ["/bin/bash", "-c"]
 
 RUN make
 RUN make clean

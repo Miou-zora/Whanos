@@ -1,11 +1,11 @@
 FROM node:20.9
 
+SHELL ["/bin/bash", "-c"]
+
 WORKDIR /app
 
 ONBUILD COPY package.json .
 ONBUILD COPY app app
-
-SHELL ["/bin/bash", "-c"]
 
 ONBUILD RUN npm i
 

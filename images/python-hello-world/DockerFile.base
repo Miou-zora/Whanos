@@ -1,11 +1,11 @@
 FROM python:3.12
 
+SHELL ["/bin/bash", "-c"]
+
 WORKDIR /app
 
 ONBUILD COPY requirements.txt .
 ONBUILD COPY app app
-
-SHELL ["/bin/bash", "-c"]
 
 ONBUILD RUN pip install --no-cache-dir -r requirements.txt
 

@@ -1,11 +1,11 @@
 FROM gcc:13.2
 
+SHELL ["/bin/bash", "-c"]
+
 WORKDIR /app
 
 ONBUILD COPY Makefile .
 ONBUILD COPY app app
-
-SHELL ["/bin/bash", "-c"]
 
 ONBUILD RUN make
 ONBUILD RUN make clean
