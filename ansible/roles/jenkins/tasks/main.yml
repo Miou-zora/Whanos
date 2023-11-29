@@ -23,22 +23,25 @@
       - jenkins
     update_cache: yes
 
+- name: download jenkins-plugin-manager
+  get_url:
+    url: https://github.com/jenkinsci/plugin-installation-manager-tool/releases/download/2.12.13/jenkins-plugin-manager-2.12.13.jar
+    dest: $HOME/jenkins-plugin-manager.jar
+
+- name: Add plugins file
+  become: yes
+  copy:
+    src: plugins.yaml
+    dest: /etc/plugins.yaml
+
+
+- name: run the jenkins-plugin-manager
+  become: yes
+  command: java -jar jenkins-plugin-manager.jar --jenkins-version 2.263.4 --plugin-file /etc/plugins.yaml --plugin-download-directory /var/lib/jenkins/plugins
+
 - name: Start Jenkins
   become: yes
   service:
     name: jenkins
     state: started
     enabled: yes
-
-
-# metadata_startup_script = <<SCRIPT
-#   sudo apt update
-#   sudo apt install openjdk-11-jre -y
-#   curl -fsSL https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key | sudo tee \
-#       /usr/share/keyrings/jenkins-keyring.asc > /dev/null
-#   echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
-#       https://pkg.jenkins.io/debian-stable binary/ | sudo tee \
-#       /etc/apt/sources.list.d/jenkins.list > /dev/null
-#   sudo apt-get update
-#   sudo apt-get install jenkins -y
-#   SCRIPT
