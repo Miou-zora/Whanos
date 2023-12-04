@@ -1,0 +1,21 @@
+FROM maven:latest
+
+SHELL ["/bin/bash", "-c"]
+
+WORKDIR /app
+
+COPY app .
+
+RUN mvn package
+
+FROM openjdk:21
+
+SHELL ["/bin/bash", "-c"]
+
+WORKDIR /app
+
+COPY --from=0 /app/target/app.jar .
+
+RUN rm -rf /app
+
+CMD ["java", "-jar", "app.jar"]
