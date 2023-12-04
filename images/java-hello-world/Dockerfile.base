@@ -1,0 +1,13 @@
+FROM maven:latest
+
+SHELL ["/bin/bash", "-c"]
+
+WORKDIR /app
+
+ONBUILD COPY app .
+
+ONBUILD RUN mvn package
+ONBUILD RUN mv target/app.jar app.jar
+ONBUILD RUN rm -rf target src pom.xml
+
+ONBUILD CMD ["java", "-jar", "app.jar"]
