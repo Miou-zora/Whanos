@@ -21,3 +21,4 @@ jenkins:
 
 jobs:
   - file: link.groovy
+  - file: build.groovy

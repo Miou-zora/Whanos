@@ -4,6 +4,12 @@
     name:
       - openjdk-11-jre
 
+- name: Install git
+  become: yes
+  apt:
+    name:
+      - git
+
 - name: Add Jenkins key
   become: yes
   apt_key:
@@ -53,12 +59,27 @@
     regexp='^Environment="JAVA_OPTS=-Djava.awt.headless=true -Djenkins.install.runSetupWizard=false -Dcasc.jenkins.config=/var/lib/jenkins/jenkins.yml"'
     line='Environment="JAVA_OPTS=-Djava.awt.headless=true -Djenkins.install.runSetupWizard=false -Dcasc.jenkins.config=/var/lib/jenkins/jenkins.yml -DUSER_ADMIN_PASSWORD={{ USER_ADMIN_PASSWORD }}"'
 
+- name: Push check language
+  become: yes
+  copy:
+    src: check_language
+    dest: /var/lib/jenkins/check_language
+    mode: "0755"
+  register: result_check_language
+
 - name: Push link file
   become: yes
   copy:
     src: link.groovy
     dest: /var/lib/jenkins/link.groovy
   register: result_link_file
+
+- name: Push build file
+  become: yes
+  copy:
+    src: build.groovy
+    dest: /var/lib/jenkins/build.groovy
+  register: result_build_file
 
 - name: Reload systemd
   become: yes

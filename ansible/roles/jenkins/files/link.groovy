@@ -5,7 +5,7 @@ folder("Projects") {
 
 freeStyleJob("link-project") {
     parameters {
-        stringParam('REPOSITORY_URL', null, 'Git repository url to bind')
+        stringParam('REPOSITORY_URL', null, 'Git repository url to bind, ex:"https://github.com/jogendra/example-ios-apps.git"')
         stringParam('DISPLAY_NAME', null, 'Display name for the job')
         credentialsParam('GIT_CREDENTIALS') {
             description('Git credentials to bind')
@@ -28,7 +28,8 @@ freeStyleJob("link-project") {
                         scm("* * * * *")
                     }
                     steps {
-                        shell("/check_language $DISPLAY_NAME\")
+                        shell("/var/lib/jenkins/./check_language /var/lib/jenkins/workspace/Projects/'$DISPLAY_NAME'")
+                        shell("docker build . -t whanos-$DISPLAY_NAME")
                     }
                     wrappers {
                         preBuildCleanup()
