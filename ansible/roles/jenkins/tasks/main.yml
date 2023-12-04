@@ -39,27 +39,11 @@
   become: yes
   command: java -jar jenkins-plugin-manager.jar --jenkins-version 2.426.1 --plugin-file /etc/plugins.yaml --plugin-download-directory /var/lib/jenkins/plugins
 
-- name: Jenkins Skip Setup Wizard
-  become: yes
-  lineinfile:
-    dest=/lib/systemd/system/jenkins.service
-    regexp='^Environment="JAVA_OPTS=-Djava.awt.headless=true'
-    line='Environment="JAVA_OPTS=-Djava.awt.headless=true -Djenkins.install.runSetupWizard=false"'
-  register: result_skip_startup_wizard
-
 - name: CasC Jenkins
   become: yes
   copy:
     src: jenkins.yml
     dest: /var/lib/jenkins/jenkins.yml
-  register: result_jenkins_casc
-
-- name: Set CASC_JENKINS_CONFIG
-  become: yes
-  lineinfile:
-    dest=/lib/systemd/system/jenkins.service
-    regexp='^Environment="JAVA_OPTS=-Djava.awt.headless=true -Djenkins.install.runSetupWizard=false"'
-    line='Environment="JAVA_OPTS=-Djava.awt.headless=true -Djenkins.install.runSetupWizard=false -Dcasc.jenkins.config=/var/lib/jenkins/jenkins.yml"'
   register: result_jenkins_casc
 
 - name: Set USER_ADMIN_PASSWORD Env var
@@ -69,20 +53,18 @@
     regexp='^Environment="JAVA_OPTS=-Djava.awt.headless=true -Djenkins.install.runSetupWizard=false -Dcasc.jenkins.config=/var/lib/jenkins/jenkins.yml"'
     line='Environment="JAVA_OPTS=-Djava.awt.headless=true -Djenkins.install.runSetupWizard=false -Dcasc.jenkins.config=/var/lib/jenkins/jenkins.yml -DUSER_ADMIN_PASSWORD={{ USER_ADMIN_PASSWORD }}"'
 
+- name: Push link file
+  become: yes
+  copy:
+    src: link.groovy
+    dest: /var/lib/jenkins/link.groovy
+  register: result_link_file
 
 - name: Reload systemd
   become: yes
   systemd:
     daemon_reload: yes
-  when: result_plugins_file.changed or result_skip_startup_wizard.changed or result_jenkins_casc.changed
-
-- name: Restart Jenkins
-  become: yes
-  service:
-    name: jenkins
-    state: restarted
-    enabled: yes
-  when: result_plugins_file.changed or result_skip_startup_wizard.changed or result_jenkins_casc.changed
+  # when: result_plugins_file.changed or result_jenkins_casc.changed or result_link_file.changed
 
 - name: Start Jenkins
   become: yes
@@ -90,5 +72,13 @@
     name: jenkins
     state: started
     enabled: yes
-  when: not result_plugins_file.changed and not result_skip_startup_wizard.changed and not result_jenkins_casc.changed
+  when: not result_plugins_file.changed and not result_jenkins_casc.changed and not result_link_file.changed
+
+- name: Restart Jenkins
+  become: yes
+  service:
+    name: jenkins
+    state: restarted
+    enabled: yes
+  # when: result_plugins_file.changed or result_jenkins_casc.changed or result_link_file.changed
 

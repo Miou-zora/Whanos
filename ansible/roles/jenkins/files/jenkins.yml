@@ -19,5 +19,5 @@ jenkins:
             entries:
               - user: "admin"
 
-# jobs:
-#   - file: link.groovy
+jobs:
+  - file: link.groovy
