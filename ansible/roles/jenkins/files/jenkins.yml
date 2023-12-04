@@ -8,16 +8,16 @@ jenkins:
           name: "Admin"
           password: "${USER_ADMIN_PASSWORD}"
 
-  # authorizationStrategy:
-  #   roleBased:
-  #     roles:
-  #       global:
-  #         - name: "Admin group"
-  #           description: "Whanos Administrator group"
-  #           permissions:
-  #             - "Overall/Administer"
-  #           assignments:
-  #             - "admin"
+  authorizationStrategy:
+    roleBased:
+      roles:
+        global:
+          - name: "Admin group"
+            description: "Whanos Administrator group"
+            permissions:
+              - "Overall/Administer"
+            entries:
+              - user: "admin"
 
 # jobs:
-#   - file: job_dsl.groovy
+#   - file: link.groovy
