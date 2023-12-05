@@ -10,6 +10,12 @@
     name:
       - git
 
+- name: Install docker
+  become: yes
+  apt:
+    name:
+      - docker.io
+
 - name: Add Jenkins key
   become: yes
   apt_key:
@@ -66,6 +72,14 @@
     dest: /var/lib/jenkins/check_language
     mode: "0755"
   register: result_check_language
+
+- name: Push deploy
+  become: yes
+  copy:
+    src: deploy
+    dest: /var/lib/jenkins/deploy
+    mode: "0755"
+  register: result_deploy
 
 - name: Push link file
   become: yes

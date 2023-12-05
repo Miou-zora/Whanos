@@ -7,17 +7,17 @@ def open_dir(path):
     onlyfiles = [f for f in listdir(path) if isfile(join(path, f))]
     onlydir = [f for f in listdir(path) if not isfile(join(path, f))]
     if ("Makefile" in onlyfiles):
-        return "C"
+        return "c"
     if ("package.json" in onlyfiles):
-        return "JavaScript"
+        return "javascript"
     if ("requirements.txt" in onlyfiles):
-        return "Python"
+        return "python"
     if ("app" in onlydir):
         files = [f for f in listdir(path + "/app") if isfile(join(path + "/app", f))]
         if ("pom.xml" in files):
-            return "Java"
+            return "java"
         if (len(files) == 1 and files[0] == "main.bf"):
-            return "Befunge"
+            return "befunge"
     return "Unknown"
 
 def main():

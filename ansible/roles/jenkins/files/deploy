@@ -1,0 +1,9 @@
+#!/bin/bash
+echo $(/var/lib/jenkins/./check_language $1) > language.txt
+language=$(cat language.txt)
+echo "language: $language"
+if [ -f Dockerfile ]; then
+    docker build -t whanos-$language - < /images/$language/Dockerfile.base
+else
+    docker build -f /images/$language/Dockerfile.standalone . -t whanos-$language-standalone
+fi

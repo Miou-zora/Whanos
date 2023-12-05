@@ -28,8 +28,7 @@ freeStyleJob("link-project") {
                         scm("* * * * *")
                     }
                     steps {
-                        shell("/var/lib/jenkins/./check_language /var/lib/jenkins/workspace/Projects/'$DISPLAY_NAME'")
-                        shell("docker build . -t whanos-$DISPLAY_NAME")
+                        shell("/var/lib/jenkins/./deploy /var/lib/jenkins/workspace/Projects/\\"$DISPLAY_NAME\\"")
                     }
                     wrappers {
                         preBuildCleanup()
