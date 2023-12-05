@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "exemple.fullname" . }}
+spec:
+  replicas: {{ .Values.deployment.replicas | default 1 }}
+  selector:
+    matchLabels:
+      {{- include "exemple.selectorLabels" . | nindent 6 }}
+    spec:
+      containers:
+          ports:
+            {{- range .Values.deployment.ports }}
+            - containerPort: {{ . }}
+              protocol: TCP
+            {{- end }}
+          resources:
+            {{- toYaml .Values.deployment.resources | nindent 12 }}

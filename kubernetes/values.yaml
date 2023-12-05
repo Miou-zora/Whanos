@@ -1,0 +1,14 @@
+deployment:
+  # Number of replicas, defaults to 1
+  replicas: 1
+  # Pod resource requests and limits
+  resources:
+    limits:
+      cpu: 100m
+      memory: 128Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+  # TCP ports to expose on the pod's containers
+  ports: [80, 8080]
+
