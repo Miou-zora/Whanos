@@ -5,5 +5,5 @@ echo "language: $language"
 if [ -f Dockerfile ]; then
     docker build -t whanos-$language - < /images/$language/Dockerfile.base
 else
-    docker build -f /images/$language/Dockerfile.standalone . -t whanos-$language-standalone
+    docker build -f /var/lib/jenkins/images/$language/Dockerfile.standalone . -t whanos-$language-standalone
 fi

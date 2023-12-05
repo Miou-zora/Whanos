@@ -95,6 +95,22 @@
     dest: /var/lib/jenkins/build.groovy
   register: result_build_file
 
+- name: Push images folder
+  become: yes
+  copy:
+    src: ../../../../images/
+    dest: /var/lib/jenkins/images/
+    mode: "0755"
+  register: result_images_folder
+
+- name: Grant Docker permissions
+  become: yes
+  file:
+    path: /var/run/docker.sock
+    owner: jenkins
+    group: docker
+    mode: '0660'
+
 - name: Reload systemd
   become: yes
   systemd:
