@@ -62,7 +62,7 @@
   become: yes
   lineinfile:
     dest=/lib/systemd/system/jenkins.service
-    regexp='^Environment="JAVA_OPTS=-Djava.awt.headless=true -Djenkins.install.runSetupWizard=false -Dcasc.jenkins.config=/var/lib/jenkins/jenkins.yml"'
+    regexp='^Environment="JAVA_OPTS=-Djava.awt.headless=true"'
     line='Environment="JAVA_OPTS=-Djava.awt.headless=true -Djenkins.install.runSetupWizard=false -Dcasc.jenkins.config=/var/lib/jenkins/jenkins.yml -DUSER_ADMIN_PASSWORD={{ USER_ADMIN_PASSWORD }}"'
 
 - name: Push check language
@@ -94,6 +94,13 @@
     src: build.groovy
     dest: /var/lib/jenkins/build.groovy
   register: result_build_file
+
+- name: Push key file
+  become: yes
+  copy:
+    src: key.json
+    dest: /var/lib/jenkins/key.json
+  register: result_key_file
 
 - name: Push images folder
   become: yes
