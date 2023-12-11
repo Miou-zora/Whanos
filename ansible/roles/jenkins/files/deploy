@@ -3,7 +3,13 @@ echo $(/var/lib/jenkins/./check_language $1) > language.txt
 language=$(cat language.txt)
 echo "language: $language"
 if [ -f Dockerfile ]; then
-    docker build -t whanos-$language - < /images/$language/Dockerfile.base
+    cat /var/lib/jenkins/key.json | docker login -u _json_key --password-stdin https://europe-west1-docker.pkg.dev
+    docker build -t whanos-$language - < /var/lib/jenkins/images/$language/Dockerfile.base
+    docker tag whanos-$language europe-west1-docker.pkg.dev/western-diorama-401007/whanos-registry/whanos-$language:latest
+    docker push europe-west1-docker.pkg.dev/western-diorama-401007/whanos-registry/whanos-$language
 else
+    cat /var/lib/jenkins/key.json | docker login -u _json_key --password-stdin https://europe-west1-docker.pkg.dev   
     docker build -f /var/lib/jenkins/images/$language/Dockerfile.standalone . -t whanos-$language-standalone
+    docker tag whanos-$language europe-west1-docker.pkg.dev/western-diorama-401007/whanos-registry/whanos-$language:latest
+    docker push europe-west1-docker.pkg.dev/western-diorama-401007/whanos-registry/whanos-$language
 fi
