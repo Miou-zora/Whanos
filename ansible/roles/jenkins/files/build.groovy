@@ -4,50 +4,52 @@ folder("Whanos base images") {
 }
 
 freeStyleJob("Whanos base images/whanos-c") {
-    displayName('Whanos c image')
-    description('to complete')
+    displayName('whanos-c')
 
     steps {
-        shell("echo docker build c image")
-        shell("cat /var/lib/jenkins/key.json | docker login -u _json_key_base64 --password-stdin https://europe-west1-docker.pkg.dev")
-        shell("docker build -t whanos-c - < Dockerfile.base")
-        shell("docker tag whanos-c europe-west1-docker.pkg.dev/western-diorama-401007/whanos-registry/whanos-c:0.01")
-        shell("docker push europe-west1-docker.pkg.dev/western-diorama-401007/whanos-registry/whanos-c")
+        shell("docker build -t whanos-c - < /var/lib/jenkins/images/c/Dockerfile.base")
     }
 }
 
 freeStyleJob("Whanos base images/whanos-java") {
-    displayName('Whanos java image')
-    description('to complete')
+    displayName('whanos-java')
 
     steps {
-        shell("echo docker build java image")
+        shell("docker build -t whanos-c - < /var/lib/jenkins/images/java/Dockerfile.base")
     }
 }
 
 freeStyleJob("Whanos base images/whanos-javascript") {
-    displayName('Whanos javascript image')
-    description('to complete')
+    displayName('whanos-javascript')
 
     steps {
-        shell("echo docker build javascript image")
+        shell("docker build -t whanos-c - < /var/lib/jenkins/images/javascript/Dockerfile.base")
     }
 }
 
 freeStyleJob("Whanos base images/whanos-python") {
-    displayName('Whanos python image')
-    description('to complete')
+    displayName('whanos-python')
 
     steps {
-        shell("echo docker build python image")
+        shell("docker build -t whanos-c - < /var/lib/jenkins/images/python/Dockerfile.base")
     }
 }
 
 freeStyleJob("Whanos base images/whanos-befunge") {
-    displayName('Whanos befunge image')
-    description('to complete')
+    displayName('whanos-befunge')
 
     steps {
-        shell("echo docker build befunge image")
+        shell("docker build -t whanos-c - < /var/lib/jenkins/images/befunge/Dockerfile.base")
+    }
+}
+
+freeStyleJob("Whanos base images/Build all base images") {
+    displayName('Build all base images')
+    publishers {
+        downstream('whanos-c')
+        downstream('whanos-java')
+        downstream('whanos-javascript')
+        downstream('whanos-python')
+        downstream('whanos-befunge')
     }
 }
