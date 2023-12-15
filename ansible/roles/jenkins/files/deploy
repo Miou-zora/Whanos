@@ -1,5 +1,11 @@
 #!/bin/bash
 
+echo " _       ____  _____    _   ______  _____"
+echo "| |     / / / / /   |  / | / / __ \/ ___/"
+echo "| | /| / / /_/ / /| | /  |/ / / / /\__ \ "
+echo "| |/ |/ / __  / ___ |/ /|  / /_/ /___/ / "
+echo "|__/|__/_/ /_/_/  |_/_/ |_/\____//____/  "
+                                         
 # Get the current git commit hash
 current_commit_hash=$(git rev-parse HEAD)
 
@@ -7,6 +13,12 @@ current_commit_hash=$(git rev-parse HEAD)
 echo $(/var/lib/jenkins/./check_language $1) > language.txt
 language=$(cat language.txt)
 echo "language: $language"
+
+# Check if language is known
+if [[ "$language" == "unknown" ]]; then
+    echo "Error: Unknown language detected."
+    exit 1
+fi
 
 # Check if Dockerfile exists
 if [ -f Dockerfile ]; then
@@ -27,7 +39,7 @@ if [ -f Dockerfile ]; then
         echo "Skipping image build. No change in commit hash."
     fi
 else
-    cat /var/lib/jenkins/key.json | docker login -u _json_key --password-stdin https://europe-west1-docker.pkg.dev  
+    cat /var/lib/jenkins/key.json | docker login -u _json_key --password-stdin https://europe-west1-docker.pkg.dev/
     docker build -f /var/lib/jenkins/images/$language/Dockerfile.standalone . -t whanos-$language-standalone
     docker tag whanos-$language europe-west1-docker.pkg.dev/western-diorama-401007/whanos-registry/whanos-$language-standalone:latest
     docker push europe-west1-docker.pkg.dev/western-diorama-401007/whanos-registry/whanos-$language-standalone

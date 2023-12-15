@@ -18,7 +18,7 @@ def open_dir(path):
             return "java"
         if (len(files) == 1 and files[0] == "main.bf"):
             return "befunge"
-    return "Unknown"
+    return "unknown"
 
 def main():
     if (len(sys.argv) != 2):
