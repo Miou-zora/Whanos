@@ -70,7 +70,7 @@ Put it in the ansible directory.
 Create user admin password:
 
 ```bash
-ansible-vault encrypt_string 'admin_password' --name 'USER_ADMIN_PASSWORD'
+ansible-vault encrypt_string 'admin_password' --name 'USER_ADMIN_PASSWORD' (change 'admin_password' with your password)
 ```
 
 Create a file named `group_vars/all.yml` with the following content:
