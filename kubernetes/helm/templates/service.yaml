@@ -4,8 +4,9 @@ metadata:
   name: {{ include "exemple.fullname" . }}
   namespace: default
 spec:
+  type: ClusterIP
   selector:
-    name: {{ include "exemple.fullname" . }}
+    {{- include "exemple.selectorLabels" . | nindent 6 }}
   ports:
     {{- range .Values.deployment.ports }}
     - name: port-{{ . }}
