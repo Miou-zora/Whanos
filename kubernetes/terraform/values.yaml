@@ -1,4 +1,0 @@
-deployment:
-  # TCP ports to expose on the pod's containers
-  ports: [8081, 80]
-
