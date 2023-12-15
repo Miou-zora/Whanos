@@ -11,6 +11,6 @@ if [ -f Dockerfile ]; then
 else
     cat /var/lib/jenkins/key.json | docker login -u _json_key --password-stdin https://europe-west1-docker.pkg.dev   
     docker build -f /var/lib/jenkins/images/$language/Dockerfile.standalone . -t whanos-$language-standalone
-    docker tag whanos-$language europe-west1-docker.pkg.dev/western-diorama-401007/whanos-registry/whanos-$language-standalone:latest
+    docker tag whanos-$language-standalone europe-west1-docker.pkg.dev/western-diorama-401007/whanos-registry/whanos-$language-standalone:latest
     docker push europe-west1-docker.pkg.dev/western-diorama-401007/whanos-registry/whanos-$language-standalone
 fi
