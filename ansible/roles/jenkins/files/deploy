@@ -12,7 +12,11 @@ current_commit_hash=$(git rev-parse HEAD)
 # Check the language
 echo $(/var/lib/jenkins/./check_language $1) > language.txt
 language=$(cat language.txt)
-echo "language: $language"
+
+# Format repository name
+repository=$(echo "$1" | sed -e 's/.*Projects\///g' | sed -e 's/\/[^/]*$//g')
+repository=$(echo "$repository" | tr '[:upper:]' '[:lower:]')
+echo "In $repository, language is : $language"
 
 # Check if language is known
 if [[ "$language" == "unknown" ]]; then
@@ -31,16 +35,16 @@ if [ -f Dockerfile ]; then
 
         # Build Docker image
         cat /var/lib/jenkins/key.json | docker login -u _json_key --password-stdin https://europe-west1-docker.pkg.dev
-        docker build -t whanos-$language - < /var/lib/jenkins/images/$language/Dockerfile.base
-        docker build -f /var/lib/jenkins/images/$language/Dockerfile . -t whanos-$language
-        docker tag whanos-$language europe-west1-docker.pkg.dev/western-diorama-401007/whanos-registry/whanos-$language:latest
-        docker push europe-west1-docker.pkg.dev/western-diorama-401007/whanos-registry/whanos-$language
+        docker build -t whanos-$repository-$language - < /var/lib/jenkins/images/$language/Dockerfile.base
+        docker build -f /var/lib/jenkins/images/$language/Dockerfile . -t whanos-$repository-$language
+        docker tag whanos-$repository-$language europe-west1-docker.pkg.dev/western-diorama-401007/whanos-registry/whanos-$repository-$language:latest
+        docker push europe-west1-docker.pkg.dev/western-diorama-401007/whanos-registry/whanos-$repository-$language
     else
         echo "Skipping image build. No change in commit hash."
     fi
 else
     cat /var/lib/jenkins/key.json | docker login -u _json_key --password-stdin https://europe-west1-docker.pkg.dev/
-    docker build -f /var/lib/jenkins/images/$language/Dockerfile.standalone . -t whanos-$language-standalone
-    docker tag whanos-$language europe-west1-docker.pkg.dev/western-diorama-401007/whanos-registry/whanos-$language-standalone:latest
-    docker push europe-west1-docker.pkg.dev/western-diorama-401007/whanos-registry/whanos-$language-standalone
+    docker build -f /var/lib/jenkins/images/$language/Dockerfile.standalone . -t whanos-$repository-$language-standalone
+    docker tag whanos-$repository-$language europe-west1-docker.pkg.dev/western-diorama-401007/whanos-registry/whanos-$repository-$language-standalone:latest
+    docker push europe-west1-docker.pkg.dev/western-diorama-401007/whanos-registry/whanos-$repository-$language-standalone
 fi
