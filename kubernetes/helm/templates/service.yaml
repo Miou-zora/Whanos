@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "exemple.fullname" . }}
+  namespace: default
+spec:
+  selector:
+    name: {{ include "exemple.fullname" . }}
+  ports:
+    {{- range .Values.deployment.ports }}
+    - name: port-{{ . }}
+      port: {{ . }}
+      targetPort: {{ . }}
+    {{- end }}

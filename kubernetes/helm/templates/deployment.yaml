@@ -2,13 +2,20 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "exemple.fullname" . }}
+  namespace: default
 spec:
   replicas: {{ .Values.deployment.replicas | default 1 }}
   selector:
     matchLabels:
       {{- include "exemple.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "exemple.selectorLabels" . | nindent 8 }}
     spec:
       containers:
+        - name: {{ .Chart.Name }}
+          image: europe-west1-docker.pkg.dev/western-diorama-401007/whanos-registry/whanos-javascript-standalone
           ports:
             {{- range .Values.deployment.ports }}
             - containerPort: {{ . }}
