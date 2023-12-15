@@ -102,6 +102,31 @@
     dest: /var/lib/jenkins/key.json
   register: result_key_file
 
+- name: Install terraform dependencies
+  become: yes
+  apt:
+    name:
+      - unzip
+
+- name: Install terraform
+  become: yes
+  unarchive:
+    src: https://releases.hashicorp.com/terraform/0.14.10/terraform_0.14.10_linux_amd64.zip
+    dest: /usr/local/bin/
+    remote_src: yes
+    creates: /usr/local/bin/terraform
+
+- name: Push kubernetes files
+  become: yes
+  copy:
+    src: ../../../../kubernetes/
+    dest: /var/lib/jenkins/kubernetes/
+    mode: "777"
+
+- name: Run setup script of terraform
+  become: yes
+  command: /var/lib/jenkins/kubernetes/terraformFiles/setup.sh
+
 - name: Push images folder
   become: yes
   copy:
@@ -117,6 +142,10 @@
     owner: jenkins
     group: docker
     mode: '0660'
+
+- name: Make jenkins user root
+  become: yes
+  command: usermod -aG root jenkins
 
 - name: Reload systemd
   become: yes
