@@ -59,7 +59,7 @@ fi
 # WHANOS_FILE_PATH=$3
 if [ -f $1/whanos.yml ] ; then
     echo "Deploying to Kubernetes..."
-    sudo /var/lib/jenkins/kubernetes/terraformFiles/deploy.sh $repository $image_name $1/whanos.yml
+    sudo /var/lib/jenkins/kubernetes/terraformFiles/deploy.sh $repository europe-west1-docker.pkg.dev/western-diorama-401007/whanos-registry/$image_name $1/whanos.yml
 else
     echo "No whanos.yml file found in $1 ($1/whanos.yml)"
 fi

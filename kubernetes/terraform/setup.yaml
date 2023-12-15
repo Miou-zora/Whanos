@@ -1,1 +1,2 @@
 nameOverride: test-name
+ImageName: image-that-does-not-exist

@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: {{ .Chart.Name }}
-          image: europe-west1-docker.pkg.dev/western-diorama-401007/whanos-registry/whanos-javascript-standalone
+          image: {{ .Values.ImageName }}
           ports:
             {{- range .Values.deployment.ports }}
             - containerPort: {{ . }}
