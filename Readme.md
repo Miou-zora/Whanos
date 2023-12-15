@@ -67,21 +67,18 @@ all:
 
 Put it in the ansible directory.
 
+Create user admin password:
+
+```bash
+ansible-vault encrypt_string 'admin_password' --name 'USER_ADMIN_PASSWORD'
+```
+
 Create a file named `group_vars/all.yml` with the following content:
 
 ```yaml
 GOOGLE_KEY: "path_to_your_credentials_file" (same as terraform)
-USER_ADMIN_PASSWORD: "your_password" (can be vaulted or not)
+USER_ADMIN_PASSWORD: "your_password" (you previously created it with ansible-vault)
 # TODO: add variables for gcp (deploy script)
-```
-
-Put it in the ansible directory.
-
-create a file named `ansible.cfg` with the following content (optional if you don't have vault password):
-
-```yaml
-[defaults]
-ask_vault_pass = True
 ```
 
 Put it in the ansible directory.
