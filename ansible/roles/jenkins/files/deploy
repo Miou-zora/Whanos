@@ -36,20 +36,20 @@ if [ -f Dockerfile ]; then
         echo "$current_commit_hash" > previous_commit_hash.txt
 
         # Build Docker image
-        cat /var/lib/jenkins/key.json | docker login -u _json_key --password-stdin https://europe-west1-docker.pkg.dev
+        cat /var/lib/jenkins/key.json | docker login -u _json_key --password-stdin https://$REGION
         docker build -t $image_name - < /var/lib/jenkins/images/$language/Dockerfile.base
         docker build -f /var/lib/jenkins/images/$language/Dockerfile . -t $image_name
-        docker tag $image_name europe-west1-docker.pkg.dev/western-diorama-401007/whanos-registry/$image_name:latest
-        docker push europe-west1-docker.pkg.dev/western-diorama-401007/whanos-registry/$image_name
+        docker tag $image_name $REGION/$PROJECT_NAME/whanos-registry/$image_name:latest
+        docker push $REGION/$PROJECT_NAME/whanos-registry/$image_name
     else
         echo "Skipping image build. No change in commit hash."
     fi
 else
     image_name="$image_name-standalone"
-    cat /var/lib/jenkins/key.json | docker login -u _json_key --password-stdin https://europe-west1-docker.pkg.dev/
+    cat /var/lib/jenkins/key.json | docker login -u _json_key --password-stdin https://$REGION/
     docker build -f /var/lib/jenkins/images/$language/Dockerfile.standalone . -t $image_name
-    docker tag $image_name europe-west1-docker.pkg.dev/western-diorama-401007/whanos-registry/$image_name:latest
-    docker push europe-west1-docker.pkg.dev/western-diorama-401007/whanos-registry/$image_name
+    docker tag $image_name $REGION/$PROJECT_NAME/whanos-registry/$image_name:latest
+    docker push $REGION/$PROJECT_NAME/whanos-registry/$image_name
 fi
 
 
@@ -59,7 +59,7 @@ fi
 # WHANOS_FILE_PATH=$3
 if [ -f $1/whanos.yml ] ; then
     echo "Deploying to Kubernetes..."
-    sudo /var/lib/jenkins/kubernetes/terraformFiles/deploy.sh $repository europe-west1-docker.pkg.dev/western-diorama-401007/whanos-registry/$image_name $1/whanos.yml
+    sudo /var/lib/jenkins/kubernetes/terraformFiles/deploy.sh $repository $REGION/$PROJECT_NAME/whanos-registry/$image_name $1/whanos.yml
 else
     echo "No whanos.yml file found in $1 ($1/whanos.yml)"
 fi

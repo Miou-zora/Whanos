@@ -98,7 +98,7 @@
 - name: Push key file
   become: yes
   copy:
-    src: key.json
+    src: {{ GOOGLE_KEY }}
     dest: /var/lib/jenkins/key.json
   register: result_key_file
 
