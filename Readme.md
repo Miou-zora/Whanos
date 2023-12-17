@@ -78,10 +78,18 @@ Create a file named `group_vars/all.yml` with the following content:
 ```yaml
 GOOGLE_KEY: "path_to_your_credentials_file" (same as terraform)
 USER_ADMIN_PASSWORD: "your_password" (you previously created it with ansible-vault)
-# TODO: add variables for gcp (deploy script)
 ```
 
 Put it in the ansible directory.
+
+Create a file named `.env` with the following content:
+
+```bash
+REGION= "your project region on gcp"
+PROJECT_NAME= "your project name on gcp"
+```
+
+Put it in the ansible/roles/jenkins/files directory.
 
 Then run the following command (in the ansible directory):
 
