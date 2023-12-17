@@ -1,6 +1,6 @@
 resource "google_container_cluster" "whanos-cluster" {
   name                     = "whanos-cluster"
-  location                 = "europe-west1"
+  location                 = var.project_region
 
   enable_autopilot         = true
 }

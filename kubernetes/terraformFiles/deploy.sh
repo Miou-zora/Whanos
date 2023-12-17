@@ -14,4 +14,4 @@ sed -i "s/^resource \"helm_release\".*/resource \"helm_release\" \"$PROJECT_NAME
 sed -i "s/^  name       = .*/  name       = \"$PROJECT_NAME\"/" /var/lib/jenkins/kubernetes/terraform/helm.tf
 
 cd /var/lib/jenkins/kubernetes/terraform
-terraform apply -var-file="variables.tfvars" -target=helm_release.$PROJECT_NAME -auto-approve -no-color
+terraform apply -lock=false -var-file="variables.tfvars" -target=helm_release.$PROJECT_NAME -auto-approve -no-color
