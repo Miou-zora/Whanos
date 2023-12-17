@@ -34,6 +34,8 @@ machine_type="your machine type"
 machine_zone="your machine zone"
 ```
 
+For kubernetes, you need to copy this file in kubernetes/terraform directory.
+
 Put your credentials file in the terraform directory.
 
 Finally, you can run the following commands (in the terraform directory):
